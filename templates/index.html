@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Expense Tracker</h1>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      <p>
+        {{ form.amount.label }}<br />
+        {{ form.amount(size=32) }}<br />
+        {% for error in form.amount.errors %}
+        <span style="color: red">[{{ error }}]</span>
+        {% endfor %}
+      </p>
+      <p>
+        {{ form.category.label }}<br />
+        {{ form.category(size=32) }}<br />
+        {% for error in form.category.errors %}
+        <span style="color: red">[{{ error }}]</span>
+        {% endfor %}
+      </p>
+      <p>
+        {{ form.expense_date.label }}<br />
+        {{ form.expense_date(size=32) }}<br />
+        {% for error in form.expense_date.errors %}
+        <span style="color: red">[{{ error }}]</span>
+        {% endfor %}
+      </p>
+      <p>
+        <label for="criteria">Select Criteria:</label>
+        <select name="criteria" id="criteria">
+          <option value="past_month">Past Month</option>
+          <option value="past_year">Past Year</option>
+          <option value="past_week">Past Week</option>
+          <option value="by_category">By Category</option>
+        </select>
+      </p>
+      <p>{{ form.submit() }}</p>
+    </form>
+
+    {% if plot_url %}
+    <h2>Expenses by Selected Criteria</h2>
+    <img src="data:image/png;base64,{{ plot_url }}" alt="Expenses Plot" />
+    {% endif %} {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul>
+      {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
+  </body>
+</html>
